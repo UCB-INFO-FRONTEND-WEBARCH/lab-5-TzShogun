@@ -45,10 +45,41 @@ import "./Button.css";
  *   - Reference Button.css to see existing styles.
  */
 
-export function Button({children}) {
+export function Button({
+  children,
+  variant = "fill",
+  size = "medium",
+  color = "primary",
+  disabled = false,
+  icon = null,
+  onClick,
+}) {
+  // Build class list per spec
+  const classes = [
+    "button",
+    `variant-${variant}`,
+    `size-${size}`,
+    `color-${color}`,
+    disabled ? "disabled" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const handleClick = (e) => {
+    if (disabled) return;
+    if (typeof onClick === "function") onClick(e);
+  };
+
   return (
-    <button>
-        {children}
+    <button
+      type="button"
+      className={classes}
+      disabled={disabled}
+      onClick={handleClick}
+      aria-disabled={disabled}
+    >
+      {icon && <span className="icon">{icon}</span>}
+      {children}
     </button>
   );
 }
